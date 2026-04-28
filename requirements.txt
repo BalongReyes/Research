@@ -1,0 +1,34 @@
+# requirements.txt
+# Cobb 500 Chick Defect Detection System
+# Jetson Orin Nano 8GB – JetPack 6.x (Python 3.10)
+#
+# Installation order matters on Jetson.
+# Follow the SETUP.md instructions exactly.
+#
+# ── Core ────────────────────────────────────────────────────────────────
+ultralytics>=8.3.0          # YOLOv11 (includes YOLOv11 architecture)
+torch>=2.2.0                # Pre-installed via JetPack – do NOT pip install
+torchvision>=0.17.0         # Pre-installed via JetPack – do NOT pip install
+
+# ── Computer Vision ─────────────────────────────────────────────────────
+opencv-python>=4.9.0.80     # Use opencv-python-headless if no display
+numpy>=1.24.0
+
+# ── GUI ─────────────────────────────────────────────────────────────────
+PyQt5>=5.15.0
+
+# ── Dataset & Utilities ──────────────────────────────────────────────────
+pyyaml>=6.0
+Pillow>=10.0.0
+tqdm>=4.66.0
+
+# ── Evaluation & Plotting ────────────────────────────────────────────────
+matplotlib>=3.8.0
+seaborn>=0.13.0
+scikit-learn>=1.4.0         # Optional: for extended metrics
+
+# ── Jetson GPIO (install separately – not on PyPI standard) ─────────────
+# Jetson.GPIO                 # Already in JetPack; see SETUP.md
+
+# ── Dev / Testing ────────────────────────────────────────────────────────
+pytest>=8.0.0
