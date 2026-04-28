@@ -1,0 +1,7 @@
+2026-04-28 23:49:13 [INFO    ] root: Logging to file: /home/research/chick_defect_project/logs/system_20260428_234913.log
+2026-04-28 23:49:13 [INFO    ] __main__: ============================================================
+2026-04-28 23:49:13 [INFO    ] __main__:   Cobb 500 Chick Defect Detection System  –  Starting
+2026-04-28 23:49:13 [INFO    ] __main__: ============================================================
+2026-04-28 23:49:13 [INFO    ] __main__: Model  : yolo11n.pt
+2026-04-28 23:49:13 [INFO    ] __main__: Device : cuda
+2026-04-28 23:49:13 [INFO    ] __main__: Conf   : 0.4   IoU: 0.45
