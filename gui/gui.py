@@ -310,7 +310,13 @@ class MainWindow(QMainWindow):
 
     def _start_inspection(self):
         self._reset_ui()
-        self.worker = DetectionWorker(self.detector, self.cam_manager)
+        
+        # Instantiate the SessionLogger
+        session_log = SessionLogger()
+        
+        # Pass session_log to the DetectionWorker
+        self.worker = DetectionWorker(self.detector, self.cam_manager, session_log)
+        
         self.worker.frame_ready.connect(self._on_frame)
         self.worker.state_updated.connect(self._on_state)
         self.worker.verdict_ready.connect(self._on_verdict)
