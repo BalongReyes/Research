@@ -24,6 +24,8 @@ import logging
 from pathlib import Path
 from typing import Optional
 
+from utils.session_logger import SessionLogger
+
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QLabel, QVBoxLayout,
     QHBoxLayout, QPushButton, QTextEdit, QProgressBar, QFrame, QGridLayout,
@@ -81,32 +83,38 @@ def draw_detections(frame: np.ndarray, detections: list, confirmed: set) -> np.n
 # ---------------------------------------------------------------------------
 
 class DetectionWorker(QThread):
-    frame_ready    = pyqtSignal(np.ndarray, list)      # (annotated_frame, detections)
-    state_updated  = pyqtSignal(object)                # TemporalState
-    verdict_ready  = pyqtSignal(dict)                  # final verdict dict
+    frame_ready    = pyqtSignal(np.ndarray, list)
+    state_updated  = pyqtSignal(object)
+    verdict_ready  = pyqtSignal(dict)
     log_message    = pyqtSignal(str)
 
-    def __init__(self, detector, cam_manager, parent=None):
+    def __init__(self, detector, cam_manager, session_log, parent=None):
         super().__init__(parent)
         self.detector    = detector
         self.cam_manager = cam_manager
+        self.session_log = session_log
         self._running    = False
         self._mutex      = QMutex()
 
     def run(self):
         self._running = True
         self.detector.reset()
+        max_conf = 0.0
 
         while self._running:
             frame_left, frame_right = self.cam_manager.read_pair()
 
-            # Use left camera for primary inference
             if frame_left is None:
                 time.sleep(0.03)
                 continue
 
             detections = self.detector.infer(frame_left)
             state      = self.detector.update_temporal_state(detections)
+
+            # Track max confidence
+            for d in detections:
+                if d.confidence > max_conf:
+                    max_conf = d.confidence
 
             # Annotate left frame; embed right frame as inset
             annotated = draw_detections(frame_left, detections, state.confirmed)
@@ -121,18 +129,22 @@ class DetectionWorker(QThread):
             self.frame_ready.emit(annotated, detections)
             self.state_updated.emit(state)
 
-            # Check inspection window
             if state.total_elapsed >= 15.0:
                 verdict = self.detector.get_verdict()
+                # Record to CSV
+                chick_num = self.session_log.record(verdict, confidence_max=max_conf)
+                verdict["chick_num"]   = chick_num
+                verdict["max_conf"]    = round(max_conf, 2)
                 self.verdict_ready.emit(verdict)
                 self.log_message.emit(
-                    f"Verdict: {verdict['result']} | "
-                    f"Defects: {', '.join(verdict['defects']) or 'None'}"
+                    f"Chick #{chick_num} → {verdict['result']} | "
+                    f"Defects: {', '.join(verdict['defects']) or 'None'} | "
+                    f"Conf: {max_conf:.0%}"
                 )
                 self._running = False
                 break
 
-            time.sleep(0.033)   # ~30 fps
+            time.sleep(0.033)
 
     def stop(self):
         self._running = False
