@@ -1,0 +1,13 @@
+2026-04-29 00:23:01 [INFO    ] root: Logging to file: /home/research/chick_defect_project/logs/system_20260429_002301.log
+2026-04-29 00:23:01 [INFO    ] __main__: ============================================================
+2026-04-29 00:23:01 [INFO    ] __main__:   Cobb 500 Chick Defect Detection System  –  Starting
+2026-04-29 00:23:01 [INFO    ] __main__: ============================================================
+2026-04-29 00:23:01 [INFO    ] __main__: Model  : yolo11n.pt
+2026-04-29 00:23:01 [INFO    ] __main__: Device : cuda
+2026-04-29 00:23:01 [INFO    ] __main__: Conf   : 0.4   IoU: 0.45
+2026-04-29 00:23:01 [INFO    ] src.detector: Loading model from yolo11n.pt on device=cuda
+2026-04-29 00:23:01 [INFO    ] src.detector: Model loaded successfully.
+2026-04-29 00:23:01 [INFO    ] src.camera_manager: Camera 0 opened at 1280×720@30fps
+2026-04-29 00:23:01 [INFO    ] src.camera_manager: Camera 2 opened at 1280×720@30fps
+2026-04-29 00:23:01 [INFO    ] __main__: Cameras : /dev/video0 (left)  /dev/video2 (right)
+2026-04-29 00:23:01 [INFO    ] __main__: Servo  : SIMULATION MODE (no GPIO output)

@@ -2,3 +2,4 @@ torchvision_src/
 chick_env/lib
 chick_env/lib64
 Miniconda3-latest-Linux-aarch64.sh
+torch-2.5.0a0+872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl
